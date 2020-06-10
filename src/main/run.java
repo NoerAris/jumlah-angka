@@ -15,38 +15,40 @@ public class run {
 		String processWord = "Processing ...";
 		String pickWord = "Pick a number from most left or right";
 		final int max = 20;
-		final String empty = "";
+		final int min = 10;
 		
 		//Start first time
 		System.out.println(firstWord);
-		//Using scanner for getting input from user
 		Scanner in = new Scanner(System.in);
 		String strNumber = in.nextLine();
 		int startNumber = 0;
 		boolean notValid = false;
-		if (!empty.equals(strNumber)) {
-			startNumber = Integer.parseInt(strNumber);
-		} else {
-			notValid = true;
-		}		
 		
+		try {
+			startNumber = Integer.parseInt(strNumber);
+			notValid = false;
+		} catch (Exception e) {
+			notValid = true;
+		}
+
 		while (notValid) {
-	        System.out.println( "Try again, Number was input not valid." ); 
+	        System.out.println( "Try again, Number was input must between 10 - 20 or your was input not a number." ); 
 	        String input = in.nextLine();
-	        if (!empty.equals(input)) {
-	        	notValid = false;
-	        	startNumber = Integer.parseInt(input);
+        	try {
+        		startNumber = Integer.parseInt(input);
+        		if (startNumber > max || startNumber < min) {
+        			notValid = true;
+				} else {
+					notValid = false;
+				}
+			} catch (Exception e) {
+				notValid = true;
 			}
 		}
 		
 		int sumUser = startNumber;
 		int sumAuto = startNumber;
 		
-		while (startNumber > max) {
-	        System.out.println( "Try again, Number was input must less than 20." ); 
-	        startNumber = Integer.parseInt(in.nextLine());
-		}
-
 		for (int i = 0; i < 5; i++) {
 			//Remove []
 			StringBuilder sb = new StringBuilder();
@@ -57,18 +59,31 @@ public class run {
 			System.out.println(processWord);
 			System.out.println("List : " + " " +  (sb.toString()).trim());
 			System.out.println(pickWord);
+			
 			String valueIn = in.nextLine();
-			
-			while (empty.equals(valueIn)) {
-		        System.out.println( "Try again, Number was input not valid." ); 
-		        valueIn = in.nextLine();
+			try {
+				Integer.parseInt(valueIn);
+				notValid = false;
+			} catch (Exception e) {
+				notValid = true;
 			}
 			
-			while (Integer.parseInt(valueIn) > max || !listInt.contains(Integer.parseInt(valueIn))
-					|| (Integer.parseInt(valueIn) != listInt.get(0) && Integer.parseInt(valueIn) != listInt.get(listInt.size() - 1))) {
-		        System.out.println( "Try again, Number was input not valid, must less than 20 or not in list number, or you choosen number not from most left or right." ); 
-		        valueIn = in.nextLine();
-			}
+			while (notValid) {
+				System.out.println("Try again, Number was input not valid, must between 10 -20 or not in list number, \r\n"
+						+ "or you choosen number not from most left or right, or you input not number." ); 
+				valueIn = in.nextLine();
+		        try {
+		        	int bil = Integer.parseInt(valueIn);
+		        	if (bil > max || !listInt.contains(bil)
+					    || (bil != listInt.get(0) && bil != listInt.get(listInt.size() - 1))) {
+		        		notValid = true;
+					} else {
+						notValid = false;
+					}
+				} catch (Exception e) {
+					notValid = true;
+				}
+			}		
 			
 			//User
 			sumUser = sumUser + Integer.parseInt(valueIn);			
@@ -141,5 +156,4 @@ public class run {
         Random rand = new Random(); 
         return list.get(rand.nextInt(list.size())); 
     } 
-
 }
